@@ -1,0 +1,43 @@
+# Root .gitignore
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment Variables (DO NOT COMMIT)
+.env
+.env.local
+.env.*.local
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build directories
+dist/
+build/
+coverage/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Node
+.npm
+.node_repl_history
+
+# Testing
+.nyc_output/
