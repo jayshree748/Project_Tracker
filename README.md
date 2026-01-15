@@ -129,3 +129,241 @@ Frontend runs on `http://localhost:3000`
 8. **Log out** using the Navbar
 
 ---
+
+
+## Project Structure
+
+```
+Project_Tracker_ProjectAI/
+├── backend/
+│   ├── src/
+│   │   ├── app.js                 # Express app setup
+│   │   ├── server.js              # Server entry point
+│   │   ├── config/
+│   │   │   ├── db.js              # MongoDB connection
+│   │   │   └── env.js             # Environment config
+│   │   ├── controllers/           # Request handlers
+│   │   │   ├── auth.controller.js
+│   │   │   └── project.controller.js
+│   │   ├── middleware/            # Custom middleware
+│   │   │   ├── auth.middleware.js
+│   │   │   └── error.middleware.js
+│   │   ├── models/                # Database schemas
+│   │   │   ├── user.model.js
+│   │   │   └── project.model.js
+│   │   ├── routes/                # API routes
+│   │   │   ├── auth.routes.js
+│   │   │   └── project.routes.js
+│   │   ├── services/              # Business logic
+│   │   │   ├── auth.service.js
+│   │   │   └── project.service.js
+│   │   └── utils/                 # Utilities
+│   │       └── token.util.js
+│   ├── .env.example               # Environment template
+│   ├── .gitignore
+│   ├── package.json
+│   └── README.md
+│
+├── frontend/
+│   ├── src/
+│   │   ├── App.js                 # Main app component
+│   │   ├── api/
+│   │   │   ├── auth.api.js        # Auth API calls
+│   │   │   ├── project.api.js     # Project API calls
+│   │   │   └── axios.js           # Axios config
+│   │   ├── components/
+│   │   │   ├── Navbar.js          # Navigation component
+│   │   │   └── ProjectCard.js     # Project card component
+│   │   ├── context/
+│   │   │   └── AuthContext.js     # Authentication context
+│   │   ├── pages/
+│   │   │   ├── Home.js            # Landing page
+│   │   │   ├── About.js           # About page
+│   │   │   ├── Contact.js         # Contact page
+│   │   │   ├── Login.js           # Login page
+│   │   │   ├── Signup.js          # Signup page
+│   │   │   ├── Dashboard.js       # Projects dashboard
+│   │   │   └── ProjectForm.js     # Create/Edit form
+│   │   ├── routes/
+│   │   │   └── ProtectedRoute.js  # Protected route HOC
+│   │   ├── styles/
+│   │   │   ├── Navbar.css
+│   │   │   ├── Auth.css
+│   │   │   ├── Pages.css
+│   │   │   ├── Dashboard.css
+│   │   │   └── ProjectForm.css
+│   │   ├── index.js               # React entry point
+│   │   └── index.css              # Global styles
+│   ├── public/
+│   ├── .env.example               # Environment template
+│   ├── .gitignore
+│   ├── package.json
+│   └── README.md
+│
+├── MONGODB_ATLAS_SETUP.md         # MongoDB setup guide
+├── DEPLOYMENT_GUIDE.md            # Vercel/Railway guide
+├── ENVIRONMENT_SETUP.md           # Environment variables guide
+├── VISUAL_GUIDE.md                # Visual guide
+├── .gitignore
+└── README.md                      # This file
+```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/signup` | Create new user account |
+| POST | `/api/auth/login` | User login |
+
+**Request/Response Examples:**
+
+```bash
+# Signup
+POST /api/auth/signup
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+
+# Response
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "userId": "507f1f77bcf86cd799439011"
+}
+
+# Login
+POST /api/auth/login
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+
+# Response
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "userId": "507f1f77bcf86cd799439011"
+}
+```
+
+### Projects
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/projects` | Get user's projects |
+| POST | `/api/projects` | Create new project |
+| PUT | `/api/projects/:id` | Update project |
+| DELETE | `/api/projects/:id` | Delete project |
+
+**Request/Response Examples:**
+
+```bash
+# Get Projects
+GET /api/projects
+Headers: Authorization: Bearer {token}
+
+# Response
+[
+  {
+    "_id": "507f1f77bcf86cd799439011",
+    "title": "Build Website",
+    "description": "Create responsive website",
+    "status": "in-progress",
+    "dueDate": "2025-02-28",
+    "createdBy": "user_id"
+  }
+]
+
+# Create Project
+POST /api/projects
+Headers: Authorization: Bearer {token}
+{
+  "title": "New Project",
+  "description": "Project description",
+  "status": "pending",
+  "dueDate": "2025-03-15"
+}
+
+# Update Project
+PUT /api/projects/507f1f77bcf86cd799439011
+Headers: Authorization: Bearer {token}
+{
+  "title": "Updated Title",
+  "status": "completed"
+}
+
+# Delete Project
+DELETE /api/projects/507f1f77bcf86cd799439011
+Headers: Authorization: Bearer {token}
+```
+
+---
+
+## Environment Variables
+
+### Backend (.env)
+
+```env
+# Server Configuration
+PORT=8000
+
+# MongoDB
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/project-tracker?retryWrites=true&w=majority
+
+# JWT
+JWT_SECRET=your_super_secret_key_change_this_in_production
+JWT_EXPIRES_IN=7d
+
+# Environment
+NODE_ENV=development
+```
+
+### Frontend (.env.local)
+
+```env
+# API Base URL
+REACT_APP_API_URL=http://localhost:8000/api
+```
+
+---
+
+## Features in Detail
+
+### 1. User Authentication
+- ✅ Secure signup with password hashing
+- ✅ Email-based login
+- ✅ JWT tokens stored in localStorage
+- ✅ Automatic token injection in API requests
+- ✅ Protected routes based on authentication
+
+### 2. Project Management
+- ✅ **Create**: Add new projects with details
+- ✅ **Read**: View all user projects in grid layout
+- ✅ **Update**: Edit project details (FULLY WORKING)
+- ✅ **Delete**: Remove projects with confirmation
+
+### 3. Responsive Design
+- ✅ Mobile-first approach
+- ✅ Mobile: 320px - 479px
+- ✅ Tablet: 480px - 767px
+- ✅ Desktop: 768px+
+- ✅ All pages responsive
+
+### 4. Navigation
+- ✅ Navbar with conditional menu items
+- ✅ Links to Home, About, Contact (public)
+- ✅ Dashboard, Logout for authenticated users
+- ✅ Sign In, Sign Up for guests
+- ✅ Active link highlighting
+
+### 5. Error Handling
+- ✅ Form validation
+- ✅ API error messages
+- ✅ User-friendly error displays
+- ✅ Loading states
+- ✅ Try-catch blocks in middleware
+
+---
